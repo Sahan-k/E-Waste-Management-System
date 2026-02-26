@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>E-Waste Connect | Sustainable Disposal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2ecc71">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        /* FULL BACKGROUND COLOR */
+        body {
+            background: linear-gradient(180deg, #eef3f0, #dfe7e2);
+            color: #222;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: #f7f9f8;
+            padding: 14px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 20px;
+            color: #2ecc71;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* INSTALL BUTTON */
+        .install-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2ecc71;
+            padding: 8px 18px;
+            border-radius: 25px;
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        /* HERO */
+        .hero {
+            height: 70vh;
+            background-color: black;
+            /* linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+        url("https://images.unsplash.com/photo-1581091215367-59ab6c36f21c"); */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            /* border-bottom-left-radius:40px;
+    border-bottom-right-radius:40px; */
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-green {
+            background: #2ecc71;
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: transparent;
+            background: #2ecc71;
+            border: 2px solid #fff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* CARDS */
+        .cards {
+            margin-top: -80px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding-bottom: 80px;
+            background-color: black;
+        }
+
+        .card {
+            background: #fff;
+            width: 360px;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e8f8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            margin-bottom: 15px;
+            font-size: 26px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:900px) {
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+        }
+
+       /* Background Blur Effect */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Glassmorphism Box */
+.modal-content {
+  background: rgba(255, 255, 255, 0.15);
+  margin: 8% auto;
+  padding: 30px;
+  width: 45%;
+  border-radius: 15px;
+  color: #fff;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.5s ease;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Close Button */
+.close {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close:hover {
+  color: red;
+  transform: rotate(90deg);
+}
+
+/* Icons */
+.icon {
+  margin-right: 10px;
+  color: #00ffcc;
+}
+
+/* Service List */
+.service-list {
+  list-style: none;
+  padding: 0;
+}
+
+.service-list li {
+  padding: 10px 0;
+  transition: 0.3s;
+}
+
+.service-list li:hover {
+  transform: translateX(10px);
+  color: #00ffcc;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">♻️ E-Waste</div>
+        <ul>
+            <li><a href="#" onclick="openModal('aboutModal')">About</a></li>
+            <li><a href="#" onclick="openModal('servicesModal')">Services</a></li>
+            <li><a href="#" onclick="openModal('contactModal')">Contact</a></li>
+
+
+            <!-- INSTALL BUTTON WITH LOGO -->
+            <li>
+                <a href="#" class="install-btn">
+                    ⬇️ Install
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div>
+            <h1>Turn Trash into Treasure</h1>
+            <p>
+                A smart marketplace for responsible electronic waste disposal.
+                We bridge the gap between environmentally conscious citizens and
+                certified scrap recyclers.
+            </p>
+
+            <div class="hero-buttons">
+                <!-- <button class="btn-green">Post Your Waste</button> -->
+                <!-- <button class="btn-outline">Join as a Shop</button> -->
+                <button class="btn-outline" onclick="window.location.href='shop_register.html'">Join as a Shop</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARDS -->
+    <section class="cards" id="services">
+        <a href="login.html">
+            <div class="card">
+                <div class="card-icon">👤</div>
+                <h3>Individual Users</h3>
+                <p>
+                    Have old laptops or phones? Upload a photo, get competitive bids
+                    from nearby shops, and earn money while protecting nature.
+                </p>
+            </div>
+        </a>
+        <a href="shop_login.html">
+            <div class="card">
+                <div class="card-icon">🏢</div>
+                <h3>Certified Shops</h3>
+                <p>
+                    Find raw materials efficiently. Access live e-waste posts,
+                    send offers, and grow your recycling business.
+                </p>
+            </div>
+        </a> 
+        <a href="admin-login.html">
+            <div class="card">
+                <div class="card-icon">👨‍💼</div>
+                <h3>Admin Panel</h3>
+                <p>
+                    Manage certified shops and users, verify e-waste posts,
+                    monitor transactions, and ensure smooth platform operations.
+                </p>
+            </div>
+        </a>
+    </section>
+<!-- ABOUT MODAL -->
+<div id="aboutModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+
+    <h2><i class="fas fa-recycle icon"></i> About Our E-Waste Management System</h2>
+
+    <p>
+      The E-Waste Management System is a smart web-based platform designed to
+      help individuals safely dispose of electronic waste. Our system connects
+      users with authorized recycling centers and ensures environmentally
+      responsible disposal of electronic products.
+    </p>
+
+    <hr>
+
+    <h3><i class="fas fa-bullseye icon"></i> Our Mission</h3>
+    <p>
+      To create awareness about e-waste hazards and provide an easy, secure,
+      and eco-friendly way to recycle electronic waste.
+    </p>
+
+    <h3><i class="fas fa-eye icon"></i> Our Vision</h3>
+    <p>
+      To build a cleaner and greener future by reducing electronic waste
+      pollution and promoting sustainable recycling practices.
+    </p>
+
+    <hr>
+
+    <h3><i class="fas fa-lightbulb icon"></i> Why E-Waste Management is Important?</h3>
+    <ul class="service-list">
+      <li><i class="fas fa-skull-crossbones"></i> Prevents harmful toxins from polluting soil and water</li>
+      <li><i class="fas fa-globe"></i> Protects the environment</li>
+      <li><i class="fas fa-industry"></i> Promotes recycling and resource recovery</li>
+      <li><i class="fas fa-users"></i> Encourages responsible citizen participation</li>
+    </ul>
+
+    <hr>
+
+    <h3><i class="fas fa-star icon"></i> Key Features of Our System</h3>
+    <ul class="service-list">
+      <li><i class="fas fa-user-check"></i> Secure User Registration & Login</li>
+      <li><i class="fas fa-map-marker-alt"></i> Nearby Recycling Center Locator</li>
+      <li><i class="fas fa-calendar-check"></i> Pickup Request Scheduling</li>
+      <li><i class="fas fa-database"></i> Database Management of E-Waste Records</li>
+      <li><i class="fas fa-chart-line"></i> Tracking & Monitoring System</li>
+    </ul>
+
+    <hr>
+
+    <h3><i class="fas fa-leaf icon"></i> Environmental Impact</h3>
+    <p>
+      By using this platform, users contribute to reducing landfill waste,
+      conserving natural resources, and minimizing environmental pollution.
+      Together, we can make our planet safer and greener.
+    </p>
+
+  </div>
+</div>
+
+
+<!-- SERVICES MODAL -->
+<div id="servicesModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('servicesModal')">&times;</span>
+    <h2><i class="fas fa-cogs icon"></i> Our Services</h2>
+    <ul class="service-list">
+      <li><i class="fas fa-truck"></i> Doorstep Collection</li>
+      <li><i class="fas fa-recycle"></i> Safe Recycling</li>
+      <li><i class="fas fa-calendar-check"></i> Pickup Scheduling</li>
+      <li><i class="fas fa-leaf"></i> Environmental Awareness</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div id="contactModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('contactModal')">&times;</span>
+    <h2><i class="fas fa-envelope icon"></i> Contact Us</h2>
+    <p><i class="fas fa-envelope"></i> support@ewaste.com</p>
+    <p><i class="fas fa-phone"></i> +91 9876543210</p>
+    <p><i class="fas fa-map-marker-alt"></i> Green City, India</p>
+  </div>
+</div>
+
+    <script>
+
+        // Service Worker
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then(() => console.log("Service Worker Registered"))
+                .catch(err => console.error("SW error", err));
+        }
+
+      
+function openModal(id) {
+  document.getElementById(id).style.display = "block";
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+}
+
+window.onclick = function(event) {
+  let modals = document.getElementsByClassName("modal");
+  for (let i = 0; i < modals.length; i++) {
+    if (event.target == modals[i]) {
+      modals[i].style.display = "none";
+    }
+  }
+}
+
+
+
+    </script>
+
+
+</body>
+
+</html>

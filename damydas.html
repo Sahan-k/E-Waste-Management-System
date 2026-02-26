@@ -1,0 +1,223 @@
+<?php 
+include 'db.php';
+session_start();
+
+// Security check: Ensure only users can access this page
+if(!isset($_SESSION['role']) || $_SESSION['role'] != 'user') {
+    header("Location: login.php");
+    exit();
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Waste Management | User Dashboard</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Specific page overrides to ensure the map and layout look perfect */
+        #map { 
+            height: 450px; 
+            width: 100%; 
+            border-radius: 20px; 
+            z-index: 1;
+            border: 5px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        .offer-popup { text-align: center; font-family: 'Inter', sans-serif; }
+        .accept-btn { 
+            background: #27ae60; 
+            color: white; 
+            border: none; 
+            padding: 8px 15px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .nav-links { display: flex; align-items: center; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+            .stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">♻️ <span>E-Waste <b>Connect</b></span></div>
+        <div class="nav-links">
+            <span style="margin-right:20px">👋 Hi, <b><?php echo htmlspecialchars($_SESSION['username']); ?></b></span>
+            <a href="logout.php" class="btn" style="background:#e74c3c; box-shadow:none; color: white; text-decoration: none;">Logout</a>
+            <a href="profile.php" style="color: #2ecc71; text-decoration: none; margin-right: 15px;">👤 My Profile</a>
+        </div>
+    </header>
+
+    <div class="container">
+        
+       <div class="stats-grid">
+            <div class="stat-card">
+                <h1 style="color:#27ae60; margin:0;">🌱</h1>
+                <h3>Recycle Mode</h3>
+                <p>Ready to save the planet?</p>
+            </div>
+            <div class="stat-card">
+                <h1 style="color:#f1c40f; margin:0;">💰</h1>
+                <h3>Cash Earned</h3>
+                <p>Check your offers below</p>
+            </div>
+        </div>
+        <div class="container">
+    
+
+        <div class="stat-card">
+            <div class="card-icon">💰</div>
+            <h3>Cash Earned</h3>
+            <p>₹<?php echo number_format($total_earned, 2); ?></p>
+            <span class="tagline">Check your offers below</span>
+        </div>
+
+  
+
+        <div class="card">
+            <h2>Post New E-Waste</h2>
+            <form id="wasteForm" enctype="multipart/form-data" style="margin-top:20px;">
+                <label>What are you recycling?</label>
+                <input type="text" name="description" placeholder="e.g. Broken Laptop, Old Charger" required>
+                
+                <label>Upload a Photo</label>
+                <input type="file" name="waste_image" accept="image/*" required>
+                
+                <button type="submit" style="width:100%; margin-top: 10px;">Post Item to Market</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Live Pickup Map</h2>
+            <p style="color:#7f8c8d; margin-bottom:20px;">Local shops are bidding for your waste. Click on pins to see offers.</p>
+            <div id="map"></div>
+        </div>
+
+        <div class="card">
+            <h2>Recent Offers List</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Shop Name</th>
+                            <th>Offered Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="offersTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // 1. Initialize the Map (Centered at coordinates)
+        const map = L.map('map').setView([12.87, 74.88], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // 2. Handle Waste Posting (AJAX)
+        document.getElementById('wasteForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const res = await fetch('upload.php', { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                if(data.success) {
+                    alert("Success! Your waste has been posted. Please wait for shops to send offers.");
+                    location.reload(); 
+                } else {
+                    alert("Upload Error: " + data.message);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                alert("Could not connect to the server.");
+            }
+        };
+
+        // 3. Load Shop Offers and Markers
+        function fetchOffers() {
+            fetch('get_offers.php')
+                .then(res => res.json())
+                .then(offers => {
+                    const tableBody = document.getElementById('offersTableBody');
+                    tableBody.innerHTML = ""; 
+
+                    if (offers.length === 0) {
+                        tableBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No offers received yet.</td></tr>";
+                        return;
+                    }
+
+                    offers.forEach(offer => {
+                        // Create Map Marker
+                        if(offer.lat && offer.lng) {
+                            const marker = L.marker([parseFloat(offer.lat), parseFloat(offer.lng)]).addTo(map);
+                            
+                            marker.bindPopup(`
+                                <div class="offer-popup">
+                                    <strong style="color:#27ae60;">${offer.shop_name}</strong><br>
+                                    <b>Price: ₹${offer.price}</b><br>
+                                    <button class="accept-btn" onclick="acceptDeal('${offer.shop_name}', '${offer.price}', '${offer.post_id}')">Accept Offer</button>
+                                </div>
+                            `);
+                        }
+
+                        // Add to Table
+                        const row = `
+                            <tr>
+                                <td><b>${offer.shop_name}</b></td>
+                                <td>₹${offer.price}</td>
+                                <td><span style="color:#27ae60; font-weight:bold;">Offered</span></td>
+                                <td><button class="btn" style="padding: 5px 15px;" onclick="acceptDeal('${offer.shop_name}', '${offer.price}', '${offer.post_id}')">Accept</button></td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(err => console.error("Error loading offers:", err));
+        }
+
+        // 4. Accept Deal and Redirect
+        function acceptDeal(shopName, price, postId) {
+            if(confirm("Are you sure you want to accept the offer of ₹" + price + " from " + shopName + "?")) {
+                window.location.href = `invoice.php?shop=${encodeURIComponent(shopName)}&price=${price}&post_id=${postId}`;
+            }
+        }
+
+        // Run fetch on page load
+        fetchOffers();
+    </script>
+</body>
+</html>

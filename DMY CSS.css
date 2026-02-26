@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary: #27ae60;
+    --primary-dark: #1e8449;
+    --accent: #f1c40f;
+    --dark: #2c3e50;
+    --light: #f8f9fa;
+    --white: #ffffff;
+    --shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; transition: all 0.3s ease; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f4f3;
+    margin: 0;
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+/* Responsive Navbar */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 15px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Main Layout Container */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Modern Glassmorphism Cards */
+.card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+h2 {
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 0;
+    border-left: 5px solid var(--primary);
+    padding-left: 15px;
+}
+
+/* Responsive Grid for Stats */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--white) 0%, #e9f7ef 100%);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+/* Buttons */
+.btn, button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+.btn:hover, button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+}
+
+/* Form Styling */
+input, select {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0 20px 0;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    font-size: 1rem;
+}
+
+input:focus { border-color: var(--primary); outline: none; }
+
+/* Map Decoration */
+#map {
+    height: 450px;
+    width: 100%;
+    border-radius: 20px;
+    border: 8px solid white;
+    box-shadow: var(--shadow);
+}
+
+/* Responsive Table */
+.table-container { overflow-x: auto; border-radius: 15px; }
+table { width: 100%; border-collapse: collapse; background: white; }
+th { background: #f8fbf9; color: #7f8c8d; padding: 18px; text-transform: uppercase; font-size: 0.8rem; }
+td { padding: 18px; border-top: 1px solid #f1f1f1; }
+
+@media (max-width: 768px) {
+    .navbar { flex-direction: column; gap: 15px; text-align: center; }
+    .container { margin: 20px auto; }
+}

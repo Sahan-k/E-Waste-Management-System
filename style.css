@@ -1,0 +1,110 @@
+/* General Root Variables for Consistency */
+:root {
+ --primary: #2ecc71;
+ --primary-dark: #27ae60;
+ --secondary: #34495e;
+ --bg-light: #f4f7f6;
+ --white: #ffffff;
+ --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+body {
+ background-color: var(--bg-light);
+ font-family: 'Inter', -apple-system, sans-serif;
+ color: var(--secondary);
+ transition: all 0.3s ease;
+}
+
+/* Navbar Enhancement */
+.navbar {
+ background: rgba(255, 255, 255, 0.95);
+ backdrop-filter: blur(10px);
+ border-bottom: 1px solid rgba(0,0,0,0.05);
+ padding: 1rem 5%;
+position: sticky;
+top: 0;
+ z-index: 1000;
+}
+
+/* Card Entry Animation */
+@keyframes fadeInUp {
+ from {
+ opacity: 0;
+transform: translateY(20px);
+ }
+ to {
+ opacity: 1;
+transform: translateY(0);
+ }
+}
+
+.card, .stat-card {
+ animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Interactive Stat Cards */
+.stats-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+ gap: 25px;
+ margin-bottom: 40px;
+}
+
+.stat-card {
+ background: var(--white);
+ padding: 30px;
+ border-radius: 24px;
+ border: 1px solid rgba(255,255,255,0.3);
+ box-shadow: var(--shadow);
+ transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+position: relative;
+overflow: hidden;
+}
+
+.stat-card:hover {
+transform: translateY(-10px) scale(1.02);
+box-shadow: 0 20px 40px rgba(46, 204, 113, 0.15);
+}
+
+/* Glowing Pulse for Cash Earned */
+.stat-card:nth-child(2) .card-icon {
+ animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+ 0% { transform: scale(1); }
+50% { transform: scale(1.1); text-shadow: 0 0 15px rgba(241, 196, 15, 0.5); }
+100% { transform: scale(1); }
+}
+
+/* Button & Input Styling */
+input[type="text"], input[type="file"] {
+ border: 2px solid #eee;
+ border-radius: 12px;
+ padding: 12px; transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+ border-color: var(--primary);
+outline: none;
+}
+
+button, .btn {
+background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+ color: white;
+border: none;
+padding: 14px 28px;
+border-radius: 12px; font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+button:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+/* Map Styling */
+#map {
+border-radius: 24px; border: 8px solid white;
+box-shadow: var(--shadow);
+}
